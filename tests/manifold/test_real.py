@@ -1,5 +1,7 @@
 import pytest
 import numpy as np
+from hypothesis import given, strategies as st
+from hypothesis.extra.numpy import arrays
 import riemopt.manifold as rm
 
 
@@ -40,3 +42,20 @@ def test_generate_random_point():
 def test_generate_random_tangent():
     r = rm.Real(3)
     assert (3, ) == r.tangent_random(np.array([1, 2, 3]), rng=2).shape
+
+
+dims = st.integers(min_value=1, max_value=20)
+floats = st.floats(-1e6, 1e6)
+
+
+@st.composite
+def manifold_and_vectors(draw, k: int):
+    n = draw(dims)
+    vecs = [draw(arrays(np.float64, n, elements=floats)) for _ in range(k)]
+    return rm.Real(n), *vecs
+
+
+@given(manifold_and_vectors(1))
+def test_point_project_is_identity(args):
+    r, p = args
+    np.testing.assert_array_equal(r.point_project(p.copy()), p)
