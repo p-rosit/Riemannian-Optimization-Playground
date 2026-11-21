@@ -30,3 +30,13 @@ def test_tangent_projects_to_same():
         np.array([3, 2, 1]),
         r.tangent_project(np.array([0, 0, 1]), p)
     )
+
+
+def test_generate_random_point():
+    r = rm.Real(2)
+    assert (2, ) == r.point_random(rng=1).shape
+
+
+def test_generate_random_tangent():
+    r = rm.Real(3)
+    assert (3, ) == r.tangent_random(np.array([1, 2, 3]), rng=2).shape
