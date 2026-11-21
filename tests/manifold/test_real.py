@@ -20,3 +20,13 @@ def test_point_projects_to_same():
         np.array([1, 2, 3, 4]),
         r.point_project(p)
     )
+
+
+def test_tangent_projects_to_same():
+    r = rm.Real(3)
+
+    p = np.array([3, 2, 1])
+    np.testing.assert_array_equal(
+        np.array([3, 2, 1]),
+        r.tangent_project(np.array([0, 0, 1]), p)
+    )
