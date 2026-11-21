@@ -1,3 +1,4 @@
+import pytest
 import numpy as np
 import riemopt.manifold as rm
 
@@ -6,7 +7,12 @@ def test_can_instantiate():
     r = rm.Real(4)
 
 
-def test_projects_to_same():
+def test_negative_value_error():
+    with pytest.raises(ValueError):
+        _ = rm.Real(-1)
+
+
+def test_point_projects_to_same():
     r = rm.Real(4)
 
     p = np.array([1, 2, 3, 4])
