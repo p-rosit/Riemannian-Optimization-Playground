@@ -1,4 +1,3 @@
-from typing import TypeVar
 import numpy as np
 from riemopt.manifold.base import Manifold, Array
 
