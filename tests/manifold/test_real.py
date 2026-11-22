@@ -6,7 +6,7 @@ import riemopt.manifold as rm
 
 
 def test_can_instantiate():
-    r = rm.Real(4)
+    _ = rm.Real(4)
 
 
 def test_negative_value_error():
