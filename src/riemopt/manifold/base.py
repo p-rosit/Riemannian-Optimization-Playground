@@ -23,11 +23,11 @@ class Manifold(ABC):
 
     @final
     def point_project(self, point: Array) -> Array:
-        return self._shaped(self._point_project(point))
+        return self._shaped(self._point_project(self._shaped(point)))
 
     @final
     def tangent_project(self, point: Array, vector: Array) -> Array:
-        return self._shaped(self._tangent_project(point, vector))
+        return self._shaped(self._tangent_project(self._shaped(point), self._shaped(vector)))
 
     @abstractmethod
     def _point_random(self, rng: np.random.Generator) -> Array:
