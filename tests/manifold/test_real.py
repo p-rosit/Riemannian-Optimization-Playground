@@ -59,3 +59,26 @@ def manifold_and_vectors(draw, k: int):
 def test_point_project_is_identity(args):
     r, p = args
     np.testing.assert_array_equal(r.point_project(p.copy()), p)
+
+
+@given(manifold_and_vectors(2))
+def test_tangent_project_is_identity(args):
+    r, p, v = args
+    np.testing.assert_array_equal(r.tangent_project(p.copy(), v.copy()), v)
+
+
+@given(manifold_and_vectors(2))
+def test_retract_is_addition(args):
+    r, p, v = args
+    np.testing.assert_array_equal(r.retract(p.copy(), v.copy()), p + v)
+
+
+@given(dims, st.integers(min_value=0))
+def test_random_point_and_tangent_have_right_shape(n, seed):
+    r = rm.Real(n)
+    p = r.point_random(seed)
+    v = r.tangent_random(p, seed)
+    assert (n, ) == p.shape
+    assert (n, ) == v.shape
+    assert np.all(np.isfinite(p))
+    assert np.all(np.isfinite(v))
