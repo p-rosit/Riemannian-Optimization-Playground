@@ -21,9 +21,10 @@ class Sphere(Manifold):
         return self._tangent_project(point, rng.normal(size=self.shape))
 
     def _point_project(self, point: Array) -> Array:
-        if (norm := np.linalg.norm(point)) <= 0.0:
+        if (scale := np.max(np.abs(point))) == 0:
             raise ZeroDivisionError
-        return point / norm
+        point = point / scale
+        return point / np.linalg.norm(point)
 
     def _tangent_project(self, point: Array, vector: Array) -> Array:
         return vector - np.dot(point, vector) * point
