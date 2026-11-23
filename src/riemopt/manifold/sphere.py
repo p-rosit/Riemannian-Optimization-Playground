@@ -18,8 +18,7 @@ class Sphere(Manifold):
         return p / norm
 
     def _tangent_random(self, point: Array, rng: np.random.Generator) -> Array:
-        vector = point + rng.normal(size=self.shape)
-        return self._tangent_project(point, vector)
+        return self._tangent_project(point, rng.normal(size=self.shape))
 
     def _point_project(self, point: Array) -> Array:
         if (norm := np.linalg.norm(point)) <= 0.0:
