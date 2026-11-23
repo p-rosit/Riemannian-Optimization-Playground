@@ -10,9 +10,9 @@ class Sphere(Manifold):
         self.shape = (n + 1, )
 
     def _point_random(self, rng: np.random.Generator) -> Array:
-        p, norm = None, np.inf
-        while norm == 0 or norm > 1.0:
-            p = rng.random(size=self.shape)
+        p, norm = None, 0.0
+        while norm == 0.0:
+            p = rng.normal(size=self.shape)
             norm = np.linalg.norm(p)
         assert p is not None, "unreachable error"
         return p / norm
