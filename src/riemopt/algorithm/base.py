@@ -81,7 +81,7 @@ class OptimizationResult:
         self.converged = converged
         if converged:
             self.point_opt = point_opt
-            self.value_opt = function.val(point_opt, OptimizationEvals())
+            self.value_opt = function.val(point_opt)
 
 
 @dataclasses.dataclass(kw_only=True)
