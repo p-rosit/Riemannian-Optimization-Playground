@@ -10,16 +10,13 @@ def rayleigh_quotient(a: Array) -> Function:
     def value(x: Array) -> float:
         (length, ) = x.shape
         assert length == n, f'expected vector of length {n}, got {length}'
-        x = np.reshape(x, (n, 1))
-
-        return (x.T @ a @ x) / (x.T @ x)
+        return -float((x.T @ a @ x) / (x.T @ x))
 
     def gradient(x: Array) -> Array:
         (length, ) = x.shape
         assert length == n, f'expected vector of length {n}, got {length}'
-        x = np.reshape(x, (n, 1))
 
         g = np.reshape(2 * (a @ x - value(x) * x) / (x.T @ x), (n, ))
-        return g
+        return -g
 
     return Function(function=value, gradient=gradient)
