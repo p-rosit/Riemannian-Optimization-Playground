@@ -49,6 +49,6 @@ class GradientDescent(Optimization):
         result.set_converged(
             function=function,
             point_opt=last_step.point,
-            converged=last_step.gradient_norm <= last_step.gradient_threshold,
+            converged=last_step.gradient_norm <= self.gradient_threshold,
         )
         return result
