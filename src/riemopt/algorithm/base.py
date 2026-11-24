@@ -53,9 +53,6 @@ class OptimizationResult:
             evals=OptimizationEvals(function_evals=0, gradient_evals=0),
         )]
 
-    def last(self) -> OptimizationStep:
-        return self.history[-1]
-
     def append(
         self,
         function: Function,
