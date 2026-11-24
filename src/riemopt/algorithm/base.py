@@ -7,8 +7,12 @@ from riemopt.manifold.base import Manifold, Array
 
 @dataclasses.dataclass
 class OptimizationEvals:
-    function_evals: int
-    gradient_evals: int
+    function_evals: int = 0
+    gradient_evals: int = 0
+
+    def add(self, evals: OptimizationEvals) -> None:
+        self.function_evals += evals.function_evals
+        self.gradient_evals += evals.gradient_evals
 
 
 @dataclasses.dataclass
@@ -64,6 +68,7 @@ class OptimizationResult:
             gradient_norm=float(np.linalg.norm(g)),
             evals=evals,
         ))
+        self.evals.add(evals)
 
 
 
