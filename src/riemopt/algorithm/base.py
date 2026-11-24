@@ -26,11 +26,12 @@ class OptimizationStep:
     gradient_norm: float = dataclasses.field(init=False)
     evals: OptimizationEvals
 
+    manifold: dataclasses.InitVar[Manifold]
     function: dataclasses.InitVar[Function]
 
-    def __post_init__(self, function: Function):
-        self.function_value = function.val(self.point, OptimizationEvals())
-        self.gradient = function.grad(self.point, OptimizationEvals())
+    def __post_init__(self, manifold: Manifold, function: Function):
+        self.function_value = function.val(self.point)
+        self.gradient = function.grad(manifold, self.point)
         self.gradient_norm = float(np.linalg.norm(self.gradient))
 
 
@@ -42,11 +43,13 @@ class OptimizationResult:
     evals: OptimizationEvals = dataclasses.field(default_factory=lambda: OptimizationEvals(function_evals=0, gradient_evals=0), init=False)
     history: list[OptimizationStep] = dataclasses.field(default_factory=list, init=False, repr=False)
 
+    manifold: dataclasses.InitVar[Manifold]
     function: dataclasses.InitVar[Function]
     point_start: dataclasses.InitVar[Array]
 
-    def __post_init__(self, function: Function, point_start: Array):
+    def __post_init__(self, manifold: Manifold, function: Function, point_start: Array):
         self.history = [OptimizationStep(
+            manifold=manifold,
             function=function,
             step=0,
             step_size=0.0,
@@ -56,6 +59,7 @@ class OptimizationResult:
 
     def append(
         self,
+        manifold: Manifold,
         function: Function,
         step_size: float,
         point: Array,
@@ -66,6 +70,7 @@ class OptimizationResult:
             step=last.step + 1,
             step_size=step_size,
             point=point,
+            manifold=manifold,
             function=function,
             evals=evals,
         ))
