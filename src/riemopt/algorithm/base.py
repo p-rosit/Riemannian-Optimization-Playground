@@ -60,7 +60,7 @@ class OptimizationResult:
         point: Array,
         evals: OptimizationEvals,
     ) -> None:
-        last = self.last()
+        last = self.history[-1]
         self.history.append(OptimizationStep(
             step=last.step + 1,
             step_size=step_size,
