@@ -29,6 +29,7 @@ class GradientDescent(OptimizationWithLineSearch):
             gradient = function.grad(self.manifold, point, evals=e)
 
             if (gradient_norm := float(np.linalg.norm(gradient))) <= self.gradient_threshold:
+                result.evals.add(e)
                 break
 
             # step along gradient
