@@ -18,6 +18,7 @@ class GradientDescent(Optimization):
             point = point_start
 
         point = point_start
+        gradient_norm = np.inf
         result = OptimizationResult(function=function, point_start=point)
 
         while len(result.history) < self.max_steps + 1:
@@ -27,7 +28,7 @@ class GradientDescent(Optimization):
             # current gradient
             g = function.grad(point, evals=e)
 
-            if float(np.linalg.norm(g)) <= self.gradient_threshold:
+            if (gradient_norm := float(np.linalg.norm(g))) <= self.gradient_threshold:
                 break
 
             # project to T_pM
@@ -44,10 +45,9 @@ class GradientDescent(Optimization):
                 evals=e
             )
 
-        last_step = result.last()
         result.set_converged(
             function=function,
-            point_opt=last_step.point,
-            converged=last_step.gradient_norm <= self.gradient_threshold,
+            point_opt=point,
+            converged=gradient_norm <= self.gradient_threshold,
         )
         return result
