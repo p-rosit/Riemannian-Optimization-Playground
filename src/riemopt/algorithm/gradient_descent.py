@@ -17,6 +17,7 @@ class GradientDescent(OptimizationWithLineSearch):
         else:
             point = point_start
 
+        step_size = self.step_size
         gradient_norm = np.inf
         result = OptimizationResult(manifold=self.manifold, function=function, point_start=point)
 
@@ -31,13 +32,13 @@ class GradientDescent(OptimizationWithLineSearch):
                 break
 
             # step along gradient
-            self.step_size, p_next = self.line_search.search(self.manifold, function, point, gradient, self.step_size)
+            step_size, p_next = self.line_search.search(self.manifold, function, point, gradient, step_size)
 
             point = p_next
             result.append(
                 manifold=self.manifold,
                 function=function,
-                step_size=self.step_size,
+                step_size=step_size,
                 point=p_next,
                 evals=e
             )
