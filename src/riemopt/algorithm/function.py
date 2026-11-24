@@ -1,6 +1,6 @@
 from typing import Callable, TYPE_CHECKING
 import dataclasses
-from riemopt.manifold.base import Array
+from riemopt.manifold.base import Array, Manifold
 
 if TYPE_CHECKING:
     from riemopt.algorithm.base import OptimizationEvals
@@ -16,7 +16,10 @@ class Function:
             evals.function_evals += 1
         return self.function(x)
 
-    def grad(self, x: Array, evals: 'OptimizationEvals | None') -> Array:
+    def grad(self, manifold: Manifold, x: Array, evals: 'OptimizationEvals | None') -> Array:
+        return manifold.tangent_project(x, self._grad(x, evals))
+
+    def _grad(self, x: Array, evals: 'OptimizationEvals | None') -> Array:
         if self.gradient is not None:
             if evals is not None:
                 evals.gradient_evals += 1
