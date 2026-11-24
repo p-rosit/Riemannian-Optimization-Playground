@@ -32,7 +32,7 @@ class GradientDescent(OptimizationWithLineSearch):
                 break
 
             # step along gradient
-            step_size, p_next = self.line_search.search(self.manifold, function, point, gradient, step_size)
+            step_size, p_next = self.line_search.search(self.manifold, function, point, gradient, step_size, e)
 
             point = p_next
             result.append(
