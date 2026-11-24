@@ -20,10 +20,17 @@ class OptimizationStep:
     step: int
     step_size: float
     point: Array = dataclasses.field(repr=False)
-    gradient: Array = dataclasses.field(repr=False)
-    function_value: float
-    gradient_norm: float
+    gradient: Array = dataclasses.field(init=False, repr=False)
+    function_value: float = dataclasses.field(init=False)
+    gradient_norm: float = dataclasses.field(init=False)
     evals: OptimizationEvals
+
+    function: dataclasses.InitVar[Function]
+
+    def __post_init__(self, function: Function):
+        self.function_value = function.val(self.point)
+        self.gradient = function.grad(self.point)
+        self.gradient_norm = float(np.linalg.norm(self.gradient))
 
 
 @dataclasses.dataclass
@@ -39,13 +46,11 @@ class OptimizationResult:
 
     def __post_init__(self, function: Function, point_start: Array):
         self.history = [OptimizationStep(
+            function=function,
             step=0,
             step_size=0.0,
             point=point_start,
-            gradient=(gradient_start := function.grad(point_start)),
-            function_value=function.val(point_start),
-            gradient_norm=float(np.linalg.norm(gradient_start)),
-            evals=OptimizationEvals(function_evals=1, gradient_evals=1),
+            evals=OptimizationEvals(function_evals=0, gradient_evals=0),
         )]
 
     def last(self) -> OptimizationStep:
@@ -63,9 +68,7 @@ class OptimizationResult:
             step=last.step + 1,
             step_size=step_size,
             point=point,
-            gradient=(g := function.grad(point)),
-            function_value=function.val(p),
-            gradient_norm=float(np.linalg.norm(g)),
+            function=function,
             evals=evals,
         ))
         self.evals.add(evals)
