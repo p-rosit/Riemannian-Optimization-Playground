@@ -1,8 +1,7 @@
 import dataclasses
-import numpy as np
-from riemopt.algorithm.base import Optimization, OptimizationResult, OptimizationStep, OptimizationEvals
+from riemopt.algorithm.base import Optimization, OptimizationResult, OptimizationEvals
 from riemopt.algorithm.function import Function
-from riemopt.manifold.base import Manifold, Array
+from riemopt.manifold.base import Array
 
 
 @dataclasses.dataclass
@@ -25,7 +24,7 @@ class GradientDescent(Optimization):
                 break
 
             # current step
-            e = OptimizationEvals(function_evals=0, gradient_evals=0)
+            e = OptimizationEvals()
 
             # current point
             p = previous_step.point
@@ -46,14 +45,10 @@ class GradientDescent(Optimization):
                 evals=e
             )
 
-        last_step = history[-1]
-        return OptimizationResult(
+        last_step = result.last()
+        result.set_converged(
+            function=function,
             point_opt=last_step.point,
-            value_opt=last_step.function_value,
-            converged=last_step.gradient_norm <= self.gradient_threshold,
-            evals=OptimizationEvals(
-                function_evals=sum(h.evals.function_evals for h in history),
-                gradient_evals=sum(h.evals.gradient_evals for h in history),
-            ),
-            history=history
+            converged=last_step.gradient_norm <= last_step.gradient_threshold,
         )
+        return result
