@@ -28,8 +28,8 @@ class OptimizationStep:
     function: dataclasses.InitVar[Function]
 
     def __post_init__(self, function: Function):
-        self.function_value = function.val(self.point)
-        self.gradient = function.grad(self.point)
+        self.function_value = function.val(self.point, OptimizationEvals())
+        self.gradient = function.grad(self.point, OptimizationEvals())
         self.gradient_norm = float(np.linalg.norm(self.gradient))
 
 
@@ -75,7 +75,7 @@ class OptimizationResult:
         self.converged = converged
         if converged:
             self.point_opt = point_opt
-            self.value_opt = function.val(point_opt)
+            self.value_opt = function.val(point_opt, OptimizationEvals())
 
 
 @dataclasses.dataclass(kw_only=True)
