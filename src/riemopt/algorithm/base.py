@@ -35,7 +35,7 @@ class OptimizationStep:
 
 @dataclasses.dataclass
 class OptimizationResult:
-    converged: bool = dataclasses.field(default=False, init=False)
+    converged: bool | None = dataclasses.field(default=None, init=False)
     value_opt: float | None = dataclasses.field(default=None, init=False)
     point_opt: Array | None = dataclasses.field(default=None, init=False)
     evals: OptimizationEvals = dataclasses.field(default_factory=lambda: OptimizationEvals(function_evals=0, gradient_evals=0), init=False)
@@ -73,6 +73,12 @@ class OptimizationResult:
         ))
         self.evals.add(evals)
 
+    def set_converged(self, function: Function, point_opt: Array, converged: bool) -> None:
+        assert self.converged is None, 'result has already been marked converged/did not converge'
+        self.converged = converged
+        if converged:
+            self.point_opt = point_opt
+            self.value_opt = function.val(point_opt)
 
 
 @dataclasses.dataclass(kw_only=True)
