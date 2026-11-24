@@ -1,12 +1,12 @@
 import dataclasses
 import numpy as np
-from riemopt.algorithm.base import Optimization, OptimizationResult, OptimizationEvals
+from riemopt.algorithm.base import OptimizationWithLineSearch, OptimizationResult, OptimizationEvals
 from riemopt.algorithm.function import Function
 from riemopt.manifold.base import Array
 
 
 @dataclasses.dataclass
-class GradientDescent(Optimization):
+class GradientDescent(OptimizationWithLineSearch):
     step_size: float
     max_steps: int
     gradient_threshold: float
@@ -26,16 +26,14 @@ class GradientDescent(Optimization):
             e = OptimizationEvals()
 
             # current gradient
-            g = function.grad(point, evals=e)
+            gradient = function.grad(self.manifold, point, evals=e)
 
-            if (gradient_norm := float(np.linalg.norm(g))) <= self.gradient_threshold:
+            if (gradient_norm := float(np.linalg.norm(gradient))) <= self.gradient_threshold:
                 break
 
-            # project to T_pM
-            g_projected = self.manifold.tangent_project(point, g)
-
             # step along gradient
-            p_next = self.manifold.retract(point, self.step_size * g_projected)
+            p_next, step_size = self.line_search.search(function, point, gradient, step_size)
+            # p_next = self.manifold.retract(point, self.step_size * g_projected)
 
             point = p_next
             result.append(
