@@ -3,7 +3,7 @@ import dataclasses
 import numpy as np
 from riemopt.algorithm.function import Function
 from riemopt.manifold.base import Manifold, Array
-from riemopt.algorithm.line_search import LineSearch, NoSearch
+from riemopt.algorithm.line_search.base import LineSearch, NoSearch
 
 
 @dataclasses.dataclass
