@@ -5,11 +5,11 @@ from riemopt.algorithm.function import Function
 
 class LineSearch(ABC):
     @abstractmethod
-    def search(self, manifold: Manifold, function: Function) -> tuple[float, Array]:
+    def search(self, manifold: Manifold, function: Function, point: Array, gradient: Array, step_size: float) -> tuple[float, Array]:
         pass
 
 
 class NoSearch(LineSearch):
-    pass
-    # def search(self) -> Array:
-    #     pass
+    def search(self, manifold: Manifold, function: Function, point: Array, gradient: Array, step_size: float) -> tuple[float, Array]:
+        _ = function
+        return step_size, manifold.retract(point, -step_size * gradient)
