@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 import dataclasses
-import numpy as np
 from riemopt.manifold.base import Manifold, Array
 from riemopt.algorithm.function import Function
 from riemopt.algorithm.line_search.base import LineSearch
