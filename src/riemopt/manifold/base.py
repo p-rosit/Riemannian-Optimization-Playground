@@ -10,6 +10,14 @@ class Manifold(ABC):
     shape: tuple[int, ...]
 
     @final
+    def tangent_dot(self, point: Array, v1: Array, v2: Array) -> float:
+        return self._tangent_dot(self._shaped(point), self._shaped(v1), self._shaped(v2))
+
+    @final
+    def tangent_norm(self, point: Array, vector: Array) -> float:
+        return self._tangent_norm(self._shaped(point), self._shaped(vector))
+
+    @final
     def point_random(self, rng: np.random.Generator | int | None = None) -> Array:
         return self._shaped(self._point_random(np.random.default_rng(rng)))
 
@@ -28,6 +36,13 @@ class Manifold(ABC):
     @final
     def tangent_project(self, point: Array, vector: Array) -> Array:
         return self._shaped(self._tangent_project(self._shaped(point), self._shaped(vector)))
+
+    @abstractmethod
+    def _tangent_dot(self, point: Array, v1: Array, v2: Array) -> float:
+        pass
+
+    def _tangent_norm(self, point: Array, vector: Array) -> float:
+        return np.sqrt(self._tangent_dot(point, vector, vector))
 
     def _point_random(self, rng: np.random.Generator) -> Array:
         N = 100
