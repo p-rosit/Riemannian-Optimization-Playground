@@ -28,7 +28,7 @@ class ArmijoBacktracking(LineSearch):
         gradient = function.grad(manifold, point, evals)
 
         projected_direction = manifold.tangent_project(point, descent_direction)
-        slope = np.dot(gradient, projected_direction)
+        slope = manifold.tangent_dot(point, gradient, projected_direction)
         if slope >= 0:
             raise ValueError(f'did not get a descent direction: grad.T @ direction = {slope}')
 
