@@ -29,13 +29,25 @@ class Manifold(ABC):
     def tangent_project(self, point: Array, vector: Array) -> Array:
         return self._shaped(self._tangent_project(self._shaped(point), self._shaped(vector)))
 
-    @abstractmethod
     def _point_random(self, rng: np.random.Generator) -> Array:
-        pass
+        N = 100
+        for _ in range(N):
+            point = 2 * rng.random(size=self.shape) - 1
+            try:
+                return self.point_project(point)
+            except Exception:
+                continue
+        raise TimeoutError(f'could not sample manifold within {N} tries')
 
-    @abstractmethod
     def _tangent_random(self, point: Array, rng: np.random.Generator) -> Array:
-        pass
+        N = 100
+        for _ in range(N):
+            vector = 2 * rng.random(size=self.shape) - 1
+            try:
+                return self.tangent_project(point, vector)
+            except Exception:
+                continue
+        raise TimeoutError(f'could not sample manifold within {N} tries')
 
     def _retract(self, point: Array, tangent: Array) -> Array:
         return self.point_project(self._shaped(point + tangent))
