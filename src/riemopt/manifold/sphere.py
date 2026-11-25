@@ -9,6 +9,10 @@ class Sphere(Manifold):
         self.dim = n
         self.shape = (n + 1, )
 
+    def _tangent_dot(self, point: Array, v1: Array, v2: Array) -> float:
+        _ = point
+        return np.dot(v1, v2)
+
     def _point_random(self, rng: np.random.Generator) -> Array:
         p, norm = None, 0.0
         while norm == 0.0:

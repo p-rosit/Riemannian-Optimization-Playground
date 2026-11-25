@@ -9,6 +9,10 @@ class Real(Manifold):
         self.dim = n
         self.shape = (n, )
 
+    def _tangent_dot(self, point: Array, v1: Array, v2: Array) -> float:
+        _ = point
+        return np.dot(v1, v2)
+
     def _point_random(self, rng: np.random.Generator) -> Array:
         return self._shaped(rng.normal(size=self.shape))
 
