@@ -12,6 +12,10 @@ class Stiefel(Manifold):
         self.dim = n * k - int(k * (k + 1) / 2)
         self.shape = (n, k)
 
+    def _tangent_dot(self, point: Array, v1: Array, v2: Array) -> float:
+        _ = point
+        return np.trace(v1.T @ v2)
+
     def _point_project(self, point: Array) -> Array:
         u, _, vt = np.linalg.svd(point, full_matrices=False)
         return u @ vt
