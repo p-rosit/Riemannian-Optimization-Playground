@@ -83,3 +83,21 @@ def test_random_point_and_tangent_have_right_shape(n, seed):
     assert (n + 1, ) == v.shape
     assert np.all(np.isfinite(p))
     assert np.all(np.isfinite(v))
+
+
+@given(dims, st.integers(min_value=0))
+def test_random_point_reproducible(n, seed):
+    r = rm.Sphere(n)
+
+    p1 = r.point_random(seed)
+    p2 = r.point_random(seed)
+    np.testing.assert_equal(p1, p2)
+
+
+@given(manifold_and_vectors(1), st.integers(min_value=0))
+def test_random_tangent_reproducible(args, seed):
+    r, p = args
+
+    t1 = r.tangent_random(p, seed)
+    t2 = r.tangent_random(p, seed)
+    np.testing.assert_equal(t1, t2)
