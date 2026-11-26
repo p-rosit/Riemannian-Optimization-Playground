@@ -10,8 +10,8 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass
 class ArmijoBacktracking(LineSearch):
-    rho: float = 0.5
-    c1: float = 1e-4
+    shrinking: float = 0.5
+    sufficient_decrease: float = 1e-4
     max_iters: int = 50
 
     def search(
@@ -32,14 +32,14 @@ class ArmijoBacktracking(LineSearch):
             raise ValueError(f'did not get a descent direction: grad.T @ direction = {slope}')
 
         next_point: Array | None = None
-        next_step = step_size / self.rho  # Increase initial step size to ensure it isn't just decreasing
+        next_step = step_size / self.shrinking  # Increase initial step size to ensure it isn't just decreasing
 
         for _ in range(self.max_iters):
             next_point = manifold.retract(point, next_step * descent_direction)
-            if function.val(next_point, evals) <= value + self.c1 * next_step * slope:
+            if function.val(next_point, evals) <= value + self.sufficient_decrease * next_step * slope:
                 return next_step, next_point
 
-            next_step = self.rho * next_step
+            next_step = self.shrinking * next_step
 
         # Ran out of iterations, give up and accept small step
         assert next_point is not None
