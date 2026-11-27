@@ -6,11 +6,11 @@ from ..conftest import draw_manifold, draw_arrays
 
 @given(data=st.data(), seed=st.integers(min_value=0))
 def test_generate_random_point(manifold: type[Manifold], data, seed: int):
-    m = draw_manifold(data, manifold)
+    m = draw_manifold(manifold, data)
     assert m.shape == m.point_random(rng=seed).shape
 
 
-@given(data=st.data(), seed_point=st.integers(min_value=0), seed=st.intergers(min_value=0))
+@given(data=st.data(), seed_point=st.integers(min_value=0), seed=st.integers(min_value=0))
 def test_generate_random_tangent(manifold: type[Manifold], data, seed_point: int, seed: int):
     m = draw_manifold(manifold, data)
     p = m.point_random(rng=seed_point)
