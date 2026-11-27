@@ -52,6 +52,30 @@ def test_retract_input_constant(manifold: type[Manifold], data):
 
 
 @given(data=st.data())
+def test_retraction_identity(manifold: type[Manifold], data):
+    m = draw_manifold(manifold, data)
+    p = m.point_project(draw_arrays(data, m, 1))
+
+    r = m.retract(p, np.zeros(shape=m.shape))
+    np.testing.assert_equal(p, r)
+
+
+@given(data=st.data())
+def test_retraction_gradient(manifold: type[Manifold], data):
+    m = draw_manifold(manifold, data)
+
+    p, v = draw_arrays(data, m, 2)
+    p = m.point_project(p)
+    v = m.tangent_project(p, v)
+
+    v = v / np.linalg.norm(v)
+
+    q = m.retract(p, 1e-6 * v)
+    w = (q - p) / np.linalg.norm(q - p)
+    np.testing.assert_almost_equal(v, w)
+
+
+@given(data=st.data())
 def test_point_project_input_constant(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
 
