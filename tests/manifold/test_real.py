@@ -18,7 +18,7 @@ def test_zero_dimension_error():
 @given(data=st.data())
 def test_point_project_is_identity(data):
     r = draw_manifold(rm.Real, data)
-    p = draw_arrays(data, r, 1)
+    (p, ) = draw_arrays(data, r, 1)
     np.testing.assert_array_equal(r.point_project(p), p)
 
 

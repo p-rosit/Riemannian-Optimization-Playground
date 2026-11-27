@@ -23,8 +23,7 @@ def manifold():
 @st.composite
 def _arrays(draw, shape: tuple[int, ...], k: int):
     floats = st.floats(-1e6, 1e6)
-    arr = [draw(arrays(np.float64, shape, elements=floats)) for _ in range(k)]
-    return *arr
+    return tuple(draw(arrays(np.float64, shape, elements=floats)) for _ in range(k))
 
 
 def draw_arrays(data, manifold: Manifold, amount: int) -> tuple[Array, ...]:

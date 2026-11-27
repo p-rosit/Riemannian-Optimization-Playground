@@ -20,7 +20,7 @@ def test_project_origin_invalid():
 @given(data=st.data())
 def test_point_project_has_unit_norm(data):
     s = draw_manifold(rm.Sphere, data)
-    p = draw_arrays(data, s, 1)
+    (p, ) = draw_arrays(data, s, 1)
     assume(np.linalg.norm(p) > 0)
 
     projected = s.point_project(p)

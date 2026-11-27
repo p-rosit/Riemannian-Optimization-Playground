@@ -54,7 +54,8 @@ def test_retract_input_constant(manifold: type[Manifold], data):
 @given(data=st.data())
 def test_retraction_identity(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
-    p = m.point_project(draw_arrays(data, m, 1))
+    (p, ) = draw_arrays(data, m, 1)
+    p = m.point_project(p)
 
     r = m.retract(p, np.zeros(shape=m.shape))
     np.testing.assert_equal(p, r)
@@ -79,7 +80,7 @@ def test_retraction_gradient(manifold: type[Manifold], data):
 def test_point_project_input_constant(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
 
-    p = draw_arrays(data, m, 1)
+    (p, ) = draw_arrays(data, m, 1)
     p_copy = p.copy()
 
     # What about sphere which requires p != 0?
@@ -91,7 +92,7 @@ def test_point_project_input_constant(manifold: type[Manifold], data):
 def test_point_project_twice(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
 
-    p = draw_arrays(data, m, 1)
+    (p, ) = draw_arrays(data, m, 1)
 
     # What about sphere which requires p != 0?
     r1 = m.point_project(p)

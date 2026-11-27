@@ -35,7 +35,7 @@ def test_point_project_is_stiefel(data):
     s = draw_manifold(rm.Stiefel, data)
     _, k = s.shape
 
-    p = draw_arrays(data, s, 1)
+    (p, ) = draw_arrays(data, s, 1)
     assume(np.all(np.linalg.norm(p, axis=1) > 0))
 
     projected = s.point_project(p)
