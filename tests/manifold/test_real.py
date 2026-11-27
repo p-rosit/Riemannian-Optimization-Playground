@@ -14,6 +14,11 @@ def test_negative_dimension_error():
         _ = rm.Real(-1)
 
 
+def test_zero_dimension_error():
+    with pytest.raises(ValueError):
+        _ = rm.Real(0)
+
+
 @given(data=st.data())
 def test_point_project_is_identity(data):
     r = draw_manifold(rm.Real, data)
