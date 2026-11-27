@@ -1,8 +1,10 @@
+from typing import Generator
 import pytest
 import inspect
 import numpy as np
 from hypothesis import strategies as st
 from hypothesis.extra.numpy import arrays
+from riemopt.manifold.base import Array
 from riemopt.manifold import (
     Manifold,
     Real,
@@ -11,13 +13,17 @@ from riemopt.manifold import (
 )
 
 
-@pytest.fixture
-def manifold():
-    def yield_concrete_classes(cls: type[Manifold]):
-        if not inspect.isabstract(cls):
-            yield cls
-        yield from iter(cls.__subclasses__())
-    yield yield_concrete_classes(Manifold)
+def _yield_concrete_subclasses(cls: type[Manifold]) -> Generator[type[Manifold], None, None]:
+    if not inspect.isabstract(cls):
+        yield cls
+    for sub in cls.__subclasses__():
+        yield from _yield_concrete_subclasses(sub)
+
+
+# hypothesis complains about function scoped fixtures
+@pytest.fixture(scope="session", params=list(_yield_concrete_subclasses(Manifold)))
+def manifold(request) -> type[Manifold]:
+    return request.param
 
 
 @st.composite
