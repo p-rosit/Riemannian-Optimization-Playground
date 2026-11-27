@@ -62,6 +62,18 @@ def test_point_project_input_constant(manifold: type[Manifold], data):
 
 
 @given(data=st.data())
+def test_point_project_twice(manifold: type[Manifold], data):
+    m = draw_manifold(manifold, data)
+
+    p = draw_arrays(data, m, 1)
+
+    # What about sphere which requires p != 0?
+    r1 = m.point_project(p)
+    r2 = m.point_project(r1)
+    np.testing.assert_equal(r1, r2)
+
+
+@given(data=st.data())
 def test_tangent_project_input_constant(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
 
@@ -73,3 +85,15 @@ def test_tangent_project_input_constant(manifold: type[Manifold], data):
     _ = m.tangent_project(p, v)
     np.testing.assert_equal(p_copy, p)
     np.testing.assert_equal(v_copy, v)
+
+
+@given(data=st.data())
+def test_tangent_project_twice(manifold: type[Manifold], data):
+    m = draw_manifold(manifold, data)
+
+    p, v = draw_arrays(data, m, 2)
+    p = m.point_project(p)  # TODO: what about invalid input?
+
+    r1 = m.tangent_project(p, v)
+    r2 = m.tangent_project(p, r1)
+    np.testing.assert_equal(r1, r2)
