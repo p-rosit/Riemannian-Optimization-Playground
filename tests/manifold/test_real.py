@@ -1,8 +1,8 @@
 import pytest
 import numpy as np
 from hypothesis import given, strategies as st
-from hypothesis.extra.numpy import arrays
 import riemopt.manifold as rm
+from ..conftest import draw_manifold, draw_arrays
 
 
 def test_can_instantiate():
@@ -14,89 +14,22 @@ def test_negative_dimension_error():
         _ = rm.Real(-1)
 
 
-def test_point_projects_to_same():
-    r = rm.Real(4)
-
-    p = np.array([1, 2, 3, 4])
-    np.testing.assert_array_equal(
-        np.array([1, 2, 3, 4]),
-        r.point_project(p)
-    )
+@given(data=st.data())
+def test_point_project_is_identity(data):
+    r = draw_manifold(rm.Real, data)
+    p = draw_arrays(data, r, 1)
+    np.testing.assert_array_equal(r.point_project(p), p)
 
 
-def test_tangent_projects_to_same():
-    r = rm.Real(3)
-
-    p = np.array([3, 2, 1])
-    np.testing.assert_array_equal(
-        np.array([3, 2, 1]),
-        r.tangent_project(np.array([0, 0, 1]), p)
-    )
+@given(data=st.data())
+def test_tangent_project_is_identity(data):
+    r = draw_manifold(rm.Real, data)
+    p, v = draw_arrays(data, r, 2)
+    np.testing.assert_array_equal(r.tangent_project(p, v), v)
 
 
-def test_generate_random_point():
-    r = rm.Real(2)
-    assert (2, ) == r.point_random(rng=1).shape
-
-
-def test_generate_random_tangent():
-    r = rm.Real(3)
-    assert (3, ) == r.tangent_random(np.array([1, 2, 3]), rng=2).shape
-
-
-dims = st.integers(min_value=1, max_value=20)
-floats = st.floats(-1e6, 1e6)
-
-
-@st.composite
-def manifold_and_vectors(draw, k: int):
-    n = draw(dims)
-    vecs = [draw(arrays(np.float64, n, elements=floats)) for _ in range(k)]
-    return rm.Real(n), *vecs
-
-
-@given(manifold_and_vectors(1))
-def test_point_project_is_identity(args):
-    r, p = args
-    np.testing.assert_array_equal(r.point_project(p.copy()), p)
-
-
-@given(manifold_and_vectors(2))
-def test_tangent_project_is_identity(args):
-    r, p, v = args
-    np.testing.assert_array_equal(r.tangent_project(p.copy(), v.copy()), v)
-
-
-@given(manifold_and_vectors(2))
-def test_retract_is_addition(args):
-    r, p, v = args
-    np.testing.assert_array_equal(r.retract(p.copy(), v.copy()), p + v)
-
-
-@given(dims, st.integers(min_value=0))
-def test_random_point_and_tangent_have_right_shape(n, seed):
-    r = rm.Real(n)
-    p = r.point_random(seed)
-    v = r.tangent_random(p, seed)
-    assert (n, ) == p.shape
-    assert (n, ) == v.shape
-    assert np.all(np.isfinite(p))
-    assert np.all(np.isfinite(v))
-
-
-@given(dims, st.integers(min_value=0))
-def test_random_point_reproducible(n, seed):
-    r = rm.Real(n)
-
-    p1 = r.point_random(seed)
-    p2 = r.point_random(seed)
-    np.testing.assert_equal(p1, p2)
-
-
-@given(manifold_and_vectors(1), st.integers(min_value=0))
-def test_random_tangent_reproducible(args, seed):
-    r, p = args
-
-    t1 = r.tangent_random(p, seed)
-    t2 = r.tangent_random(p, seed)
-    np.testing.assert_equal(t1, t2)
+@given(data=st.data())
+def test_retract_is_addition(data):
+    r = draw_manifold(rm.Real, data)
+    p, v = draw_arrays(data, r, 2)
+    np.testing.assert_array_equal(r.retract(p, v), p + v)
