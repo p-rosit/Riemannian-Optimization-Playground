@@ -41,6 +41,8 @@ def test_retract_input_constant(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
 
     p, v = draw_arrays(data, m, 2)
+    p = m.point_project(p)
+    v = m.tangent_project(p, v)
     p_copy = p.copy()
     v_copy = v.copy()
 
