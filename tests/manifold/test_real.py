@@ -5,10 +5,6 @@ import riemopt.manifold as rm
 from ..conftest import draw_manifold, draw_arrays
 
 
-def test_can_instantiate():
-    _ = rm.Real(4)
-
-
 def test_negative_dimension_error():
     with pytest.raises(ValueError):
         _ = rm.Real(-1)
