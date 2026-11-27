@@ -42,7 +42,7 @@ class Manifold(ABC):
         pass
 
     def _tangent_norm(self, point: Array, vector: Array) -> float:
-        return np.sqrt(self._tangent_dot(point, vector, vector))
+        return float(np.sqrt(self._tangent_dot(point, vector, vector)))
 
     def _point_random(self, rng: np.random.Generator) -> Array:
         N = 100
