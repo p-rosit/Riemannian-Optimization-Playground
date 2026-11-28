@@ -1,6 +1,6 @@
 import numpy as np
 import riemopt.manifold as rm
-from riemopt.algorithm.gradient_descent import GradientDescent
+import riemopt.algorithm as ra
 from .utils import rayleigh_quotient
 
 
@@ -8,7 +8,7 @@ def test_diagonal_matrix():
     a = np.diag([2.0, 3.0, -1.0])
     f = rayleigh_quotient(a)
 
-    opt = GradientDescent(
+    opt = ra.GradientDescent(
         manifold=rm.Sphere(2),
         step_size=1e-3,
         max_steps=5000,
@@ -30,7 +30,7 @@ def test_operation_count():
     a = np.diag([2.0, 3.0, -1.0])
     f = rayleigh_quotient(a)
 
-    opt = GradientDescent(
+    opt = ra.GradientDescent(
         manifold=rm.Sphere(2),
         step_size=1e-3,
         max_steps=1,
