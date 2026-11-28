@@ -1,8 +1,8 @@
 import pytest
 import numpy as np
-from hypothesis import given, assume, strategies as st
+from hypothesis import given, strategies as st
 import riemopt.manifold as rm
-from ..conftest import draw_manifold, draw_arrays
+from ..conftest import draw_manifold, draw_arrays, try_point_project
 
 
 def test_negative_dimension_error():
@@ -21,9 +21,8 @@ def test_project_origin_invalid():
 def test_point_project_has_unit_norm(data):
     s = draw_manifold(rm.Sphere, data)
     (p, ) = draw_arrays(data, s, 1)
-    assume(np.linalg.norm(p) > 0)
 
-    projected = s.point_project(p)
+    projected = try_point_project(s, p)
     assert np.isclose(1.0, np.linalg.norm(projected))
 
 
@@ -32,8 +31,7 @@ def test_tangent_project_on_tangent_space(data):
     s = draw_manifold(rm.Sphere, data)
     p, vector = draw_arrays(data, s, 2)
 
-    assume(np.linalg.norm(p) > 0)
-    point = s.point_project(p)
+    point = try_point_project(s, p)
 
     tangent = s.tangent_project(point, vector)
     assert np.isclose(0.0, np.dot(point, tangent))
@@ -43,9 +41,8 @@ def test_tangent_project_on_tangent_space(data):
 def test_retract_on_sphere(data):
     s = draw_manifold(rm.Sphere, data)
     p, v = draw_arrays(data, s, 2)
-    assume(np.linalg.norm(p) > 0)
 
-    point = s.point_project(p)
+    point = try_point_project(s, p)
     tangent = s.tangent_project(point, v)
 
     next = s.retract(point, tangent)

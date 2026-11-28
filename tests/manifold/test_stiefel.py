@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 from hypothesis import given, assume, strategies as st
 import riemopt.manifold as rm
-from ..conftest import draw_manifold, draw_arrays
+from ..conftest import draw_manifold, draw_arrays, try_point_project
 
 
 def test_negative_dimension_error():
@@ -36,9 +36,8 @@ def test_point_project_is_stiefel(data):
     _, k = s.shape
 
     (p, ) = draw_arrays(data, s, 1)
-    assume(np.all(np.linalg.norm(p, axis=1) > 0))
 
-    projected = s.point_project(p)
+    projected = try_point_project(s, p)
     np.testing.assert_array_almost_equal(projected.T @ projected, np.eye(k, k))
 
 
@@ -48,8 +47,7 @@ def test_tangent_project_on_tangent_space(data):
     _, k = s.shape
 
     p, vector = draw_arrays(data, s, 2)
-    assume(np.all(np.linalg.norm(p, axis=1) > 0))
-    point = s.point_project(p)
+    point = try_point_project(s, p)
 
     tangent = s.tangent_project(point, vector)
     np.testing.assert_array_almost_equal(
@@ -64,9 +62,7 @@ def test_retract_on_stiefel(data):
     _, k = s.shape
 
     p, v = draw_arrays(data, s, 2)
-    assume(np.all(np.linalg.norm(p, axis=1) > 0))
-
-    point = s.point_project(p)
+    point = try_point_project(s, p)
     tangent = s.tangent_project(point, v)
 
     next = s.retract(point, tangent)

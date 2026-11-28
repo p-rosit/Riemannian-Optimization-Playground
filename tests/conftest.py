@@ -2,10 +2,11 @@ from typing import Generator
 import pytest
 import inspect
 import numpy as np
-from hypothesis import strategies as st
+from hypothesis import assume, strategies as st
 from hypothesis.extra.numpy import arrays
-from riemopt.manifold.base import Array
 from riemopt.manifold import (
+    NotProjectableError,
+    Array,
     Manifold,
     Real,
     Sphere,
@@ -33,6 +34,13 @@ def _arrays(draw, shape: tuple[int, ...], k: int):
 
 def draw_arrays(data, manifold: Manifold, amount: int) -> tuple[Array, ...]:
     return data.draw(_arrays(manifold.shape, amount))
+
+
+def try_point_project(manifold: Manifold, point: Array) -> Array:
+    try:
+        return manifold.point_project(point)
+    except NotProjectableError:
+        assume(False)
 
 
 @st.composite

@@ -1,7 +1,7 @@
 import numpy as np
-from hypothesis import given, strategies as st
-from riemopt.manifold import Manifold
-from ..conftest import draw_manifold, draw_arrays
+from hypothesis import given, assume, strategies as st
+from riemopt.manifold import Manifold, NotProjectableError
+from ..conftest import draw_manifold, draw_arrays, try_point_project
 
 
 @given(data=st.data(), seed=st.integers(min_value=0))
@@ -41,7 +41,7 @@ def test_retract_input_constant(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
 
     p, v = draw_arrays(data, m, 2)
-    p = m.point_project(p)
+    p = try_point_project(m, p)
     v = m.tangent_project(p, v)
     p_copy = p.copy()
     v_copy = v.copy()
@@ -55,7 +55,7 @@ def test_retract_input_constant(manifold: type[Manifold], data):
 def test_retraction_identity(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
     (p, ) = draw_arrays(data, m, 1)
-    p = m.point_project(p)
+    p = try_point_project(m, p)
 
     r = m.retract(p, np.zeros(shape=m.shape))
     np.testing.assert_equal(p, r)
@@ -66,7 +66,7 @@ def test_retraction_gradient(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
 
     p, v = draw_arrays(data, m, 2)
-    p = m.point_project(p)
+    p = try_point_project(m, p)
     v = m.tangent_project(p, v)
 
     v = v / np.linalg.norm(v)
@@ -83,8 +83,10 @@ def test_point_project_input_constant(manifold: type[Manifold], data):
     (p, ) = draw_arrays(data, m, 1)
     p_copy = p.copy()
 
-    # What about sphere which requires p != 0?
-    _ = m.point_project(p)
+    try:
+        _ = m.point_project(p)
+    except NotProjectableError:
+        assume(False)
     np.testing.assert_equal(p_copy, p)
 
 
@@ -94,8 +96,10 @@ def test_point_project_twice(manifold: type[Manifold], data):
 
     (p, ) = draw_arrays(data, m, 1)
 
-    # What about sphere which requires p != 0?
-    r1 = m.point_project(p)
+    try:
+        r1 = m.point_project(p)
+    except NotProjectableError:
+        assume(False)
     r2 = m.point_project(r1)
     np.testing.assert_equal(r1, r2)
 
@@ -105,7 +109,7 @@ def test_tangent_project_input_constant(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
 
     p, v = draw_arrays(data, m, 2)
-    p = m.point_project(p)  # TODO: what about invalid input?
+    p = try_point_project(m, p)
     p_copy = p.copy()
     v_copy = v.copy()
 
@@ -119,7 +123,7 @@ def test_tangent_project_twice(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
 
     p, v = draw_arrays(data, m, 2)
-    p = m.point_project(p)  # TODO: what about invalid input?
+    p = try_point_project(m, p)
 
     r1 = m.tangent_project(p, v)
     r2 = m.tangent_project(p, r1)
