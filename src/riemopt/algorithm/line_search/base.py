@@ -9,11 +9,11 @@ if TYPE_CHECKING:
 
 class LineSearch(ABC):
     @abstractmethod
-    def search(self, manifold: Manifold, function: Function, point: Array, gradient: Array, step_size: float, evals: 'OptimizationEvals | None' = None) -> tuple[float, Array]:
+    def search(self, manifold: Manifold, function: Function, point: Array, descent_direction: Array, step_size: float, evals: 'OptimizationEvals | None' = None) -> tuple[float, Array]:
         pass
 
 
 class NoSearch(LineSearch):
-    def search(self, manifold: Manifold, function: Function, point: Array, gradient: Array, step_size: float, evals: 'OptimizationEvals | None' = None) -> tuple[float, Array]:
+    def search(self, manifold: Manifold, function: Function, point: Array, descent_direction: Array, step_size: float, evals: 'OptimizationEvals | None' = None) -> tuple[float, Array]:
         _ = function, evals
-        return step_size, manifold.retract(point, step_size * gradient)
+        return step_size, manifold.retract(point, step_size * descent_direction)
