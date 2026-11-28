@@ -15,11 +15,11 @@ class Real(Manifold):
         return np.dot(v1, v2)
 
     def _point_random(self, rng: np.random.Generator) -> Array:
-        return self._shaped(rng.normal(size=self.shape))
+        return rng.normal(size=self.shape)
 
     def _tangent_random(self, point: Array, rng: np.random.Generator) -> Array:
         _ = point
-        return self._shaped(rng.normal(size=self.shape))
+        return rng.normal(size=self.shape)
 
     def _point_project(self, point: Array) -> Array:
         return point
