@@ -1,6 +1,6 @@
 import dataclasses
 from riemopt.typing import Array
-from riemopt.function import Function, Evals
+from riemopt.function.base import Function, Evals
 from riemopt.manifold.base import Manifold
 from riemopt.algorithm.line_search.base import LineSearch
 

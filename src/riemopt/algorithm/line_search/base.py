@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from riemopt.typing import Array
-from riemopt.function import Function, Evals
+from riemopt.function.base import Function, Evals
 from riemopt.manifold.base import Manifold
 
 

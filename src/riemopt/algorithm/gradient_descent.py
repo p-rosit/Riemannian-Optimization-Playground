@@ -1,8 +1,8 @@
 import dataclasses
 import numpy as np
 from riemopt.typing import Array
-from riemopt.function import Function, Evals
-from riemopt.manifold import Manifold
+from riemopt.function.base import Function, Evals
+from riemopt.manifold.base import Manifold
 from riemopt.algorithm.base import OptimizationWithLineSearch, OptimizationResult
 
 

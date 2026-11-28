@@ -1,10 +1,8 @@
-from riemopt import algorithm, manifold, typing
-from riemopt.function import Function, Evals
+from riemopt import algorithm, manifold, typing, function
 
 __all__ = [
     "algorithm",
     "manifold",
     "typing",
-    "Function",
-    "Evals",
+    "function",
 ]

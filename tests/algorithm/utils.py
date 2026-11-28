@@ -1,9 +1,9 @@
 import numpy as np
 from riemopt.typing import Array
-from riemopt import Function
+import riemopt.function as rf
 
 
-def rayleigh_quotient(a: Array) -> Function:
+def rayleigh_quotient(a: Array) -> rf.Function:
     m, n = a.shape
     assert m == n, f'expected square matrix, got {(m, n)}'
 
@@ -19,4 +19,4 @@ def rayleigh_quotient(a: Array) -> Function:
         g = np.reshape(2 * (a @ x - value(x) * x) / (x.T @ x), (n, ))
         return -g
 
-    return Function(function=value, gradient=gradient)
+    return rf.Function(function=value, gradient=gradient)
