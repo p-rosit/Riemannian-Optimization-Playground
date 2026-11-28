@@ -31,5 +31,5 @@ class Stiefel(Manifold):
         return vector - point @ symmetric_part
 
     def _retract(self, point: Array, tangent: Array) -> Array:
-        q, _ = np.linalg.qr(point + tangent, 'reduced')
-        return q
+        q, r = np.linalg.qr(point + tangent, 'reduced')
+        return q * np.sign(np.diag(r))
