@@ -1,6 +1,6 @@
 import numpy as np
 from riemopt.typing import Array
-from riemopt.function import Function
+from riemopt import Function
 
 
 def rayleigh_quotient(a: Array) -> Function:

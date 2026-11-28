@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from hypothesis import given, assume, strategies as st
+from hypothesis import given, strategies as st
 import riemopt.manifold as rm
 from ..conftest import draw_manifold, draw_arrays, try_point_project
 
