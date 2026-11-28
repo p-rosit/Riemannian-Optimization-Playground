@@ -78,7 +78,6 @@ class OptimizationResult:
 
 @dataclasses.dataclass(kw_only=True)
 class Optimization(ABC):
-    manifold: Manifold
     gen: np.random.Generator = dataclasses.field(init=False)
 
     rng: dataclasses.InitVar[np.random.Generator | int | None] = None
@@ -87,7 +86,7 @@ class Optimization(ABC):
         self.gen = np.random.default_rng(rng)
 
     @abstractmethod
-    def minimize(self, function: Function, point_start: Array | None = None) -> OptimizationResult:
+    def minimize(self, manifold: Manifold, function: Function, point_start: Array | None = None) -> OptimizationResult:
         pass
 
 
