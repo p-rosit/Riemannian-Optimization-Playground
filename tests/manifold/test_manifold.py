@@ -62,7 +62,7 @@ def test_retraction_identity(manifold: type[Manifold], data):
 
 
 @given(data=st.data())
-def test_retraction_gradient(manifold: type[Manifold], data):
+def test_retraction_derivative(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
 
     p, v = draw_arrays(data, m, 2)
