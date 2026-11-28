@@ -1,5 +1,5 @@
 from riemopt.algorithm import line_search
-from riemopt.algorithm.base import Optimization, OptimizationWithLineSearch, OptimizationResult, OptimizationStep, OptimizationEvals
+from riemopt.algorithm.base import Optimization, OptimizationWithLineSearch, OptimizationResult, OptimizationStep
 from riemopt.algorithm.gradient_descent import GradientDescent
 
 __all__ = [
@@ -8,6 +8,5 @@ __all__ = [
     "OptimizationWithLineSearch",
     "OptimizationResult",
     "OptimizationStep",
-    "OptimizationEvals",
     "GradientDescent",
 ]

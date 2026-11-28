@@ -1,19 +1,10 @@
 from abc import ABC, abstractmethod
 import dataclasses
 import numpy as np
-from riemopt.function import Function
+from riemopt.function import Function, Evals
 from riemopt.manifold.base import Manifold, Array
 from riemopt.algorithm.line_search.base import LineSearch, NoSearch
 
-
-@dataclasses.dataclass
-class OptimizationEvals:
-    function_evals: int = 0
-    gradient_evals: int = 0
-
-    def add(self, evals: 'OptimizationEvals') -> None:
-        self.function_evals += evals.function_evals
-        self.gradient_evals += evals.gradient_evals
 
 
 @dataclasses.dataclass
@@ -24,7 +15,7 @@ class OptimizationStep:
     gradient: Array = dataclasses.field(init=False, repr=False)
     function_value: float = dataclasses.field(init=False)
     gradient_norm: float = dataclasses.field(init=False)
-    evals: OptimizationEvals
+    evals: Evals
 
     manifold: dataclasses.InitVar[Manifold]
     function: dataclasses.InitVar[Function]
@@ -40,7 +31,7 @@ class OptimizationResult:
     converged: bool | None = dataclasses.field(default=None, init=False)
     value_opt: float | None = dataclasses.field(default=None, init=False)
     point_opt: Array | None = dataclasses.field(default=None, init=False)
-    evals: OptimizationEvals = dataclasses.field(default_factory=lambda: OptimizationEvals(function_evals=0, gradient_evals=0), init=False)
+    evals: Evals = dataclasses.field(default_factory=lambda: Evals(function_evals=0, gradient_evals=0), init=False)
     history: list[OptimizationStep] = dataclasses.field(default_factory=list, init=False, repr=False)
 
     manifold: dataclasses.InitVar[Manifold]
@@ -54,7 +45,7 @@ class OptimizationResult:
             step=0,
             step_size=0.0,
             point=point_start,
-            evals=OptimizationEvals(function_evals=0, gradient_evals=0),
+            evals=Evals(function_evals=0, gradient_evals=0),
         )]
 
     def append(
@@ -63,7 +54,7 @@ class OptimizationResult:
         function: Function,
         step_size: float,
         point: Array,
-        evals: OptimizationEvals,
+        evals: Evals,
     ) -> None:
         last = self.history[-1]
         self.history.append(OptimizationStep(

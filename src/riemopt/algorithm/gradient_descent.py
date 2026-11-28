@@ -1,7 +1,7 @@
 import dataclasses
 import numpy as np
-from riemopt.algorithm.base import OptimizationWithLineSearch, OptimizationResult, OptimizationEvals
-from riemopt.function import Function
+from riemopt.algorithm.base import OptimizationWithLineSearch, OptimizationResult
+from riemopt.function import Function, Evals
 from riemopt.manifold.base import Array
 
 
@@ -23,7 +23,7 @@ class GradientDescent(OptimizationWithLineSearch):
 
         while len(result.history) < self.max_steps + 1:
             # current step evals
-            e = OptimizationEvals()
+            e = Evals()
 
             # current gradient
             gradient = function.grad(self.manifold, point, evals=e)

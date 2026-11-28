@@ -1,11 +1,8 @@
 from typing import TYPE_CHECKING
 import dataclasses
 from riemopt.manifold.base import Manifold, Array
-from riemopt.function import Function
+from riemopt.function import Function, Evals
 from riemopt.algorithm.line_search.base import LineSearch
-
-if TYPE_CHECKING:
-    from riemopt.algorithm.base import OptimizationEvals
 
 
 @dataclasses.dataclass
@@ -21,7 +18,7 @@ class ArmijoBacktracking(LineSearch):
         point: Array,
         descent_direction: Array,
         step_size: float,
-        evals: 'OptimizationEvals | None' = None,
+        evals: Evals | None = None,
     ) -> tuple[float, Array]:
         value = function.val(point, evals)
         gradient = function.grad(manifold, point, evals)
