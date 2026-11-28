@@ -24,3 +24,21 @@ def test_diagonal_matrix():
 
     assert r.point_opt is not None
     np.testing.assert_almost_equal(np.array([0.0, 1.0, 0.0]), np.abs(r.point_opt), decimal=3)
+
+
+def test_operation_count():
+    a = np.diag([2.0, 3.0, -1.0])
+    f = rayleigh_quotient(a)
+
+    opt = GradientDescent(
+        manifold=rm.Sphere(2),
+        step_size=1e-3,
+        max_steps=1,
+        gradient_threshold=1e-3,
+    )
+
+    r = opt.minimize(f, np.array([1.0, 1.0, 1.0]) / np.sqrt(3))
+
+    assert len(r.history) == 2
+    assert r.evals.function_evals == 0
+    assert r.evals.gradient_evals == 1
