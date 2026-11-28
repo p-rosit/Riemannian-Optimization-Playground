@@ -20,10 +20,9 @@ def _yield_concrete_subclasses(cls: type[Manifold]) -> Generator[type[Manifold],
         yield from _yield_concrete_subclasses(sub)
 
 
-# hypothesis complains about function scoped fixtures
-@pytest.fixture(scope="session", params=list(_yield_concrete_subclasses(Manifold)))
-def manifold(request) -> type[Manifold]:
-    return request.param
+def pytest_generate_tests(metafunc):
+    if "manifold" in metafunc.fixturenames:
+        metafunc.parametrize("manifold", list(_yield_concrete_subclasses(Manifold)))
 
 
 @st.composite
