@@ -27,3 +27,17 @@ class Real(Manifold):
     def _tangent_project(self, point: Array, vector: Array) -> Array:
         _ = point
         return vector
+
+    def _riemannian_gradient(self, point: Array, euclidean_gradient: Array) -> Array:
+        _ = point
+        return euclidean_gradient
+
+    def _riemannian_hessian(
+        self,
+        point: Array,
+        euclidean_gradient: Array,
+        euclidean_hessian_v: Array,
+        tangent: Array,
+    ) -> Array:
+        _ = point, euclidean_gradient, tangent
+        return euclidean_hessian_v

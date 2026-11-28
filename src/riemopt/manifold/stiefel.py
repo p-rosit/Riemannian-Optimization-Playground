@@ -34,3 +34,17 @@ class Stiefel(Manifold):
     def _retract(self, point: Array, tangent: Array) -> Array:
         q, r = np.linalg.qr(point + tangent, 'reduced')
         return q * np.sign(np.diag(r))
+
+    def _riemannian_gradient(self, point: Array, euclidean_gradient: Array) -> Array:
+        return self._tangent_project(point, euclidean_gradient)
+
+    def _riemannian_hessian(
+        self,
+        point: Array,
+        euclidean_gradient: Array,
+        euclidean_hessian_v: Array,
+        tangent: Array,
+    ) -> Array:
+        product = point.T @ euclidean_gradient
+        symmetric_part = (product + product.T) / 2
+        return self._tangent_project(point, euclidean_hessian_v - tangent @ symmetric_part)

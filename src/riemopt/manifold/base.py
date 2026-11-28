@@ -40,6 +40,25 @@ class Manifold(ABC):
     def tangent_project(self, point: Array, vector: Array) -> Array:
         return self._shaped(self._tangent_project(self._shaped(point), self._shaped(vector)))
 
+    @final
+    def riemannian_gradient(self, point: Array, euclidean_gradient: Array) -> Array:
+        return self._shaped(self._riemannian_gradient(self._shaped(point), self._shaped(euclidean_gradient)))
+
+    @final
+    def riemannian_hessian(
+        self,
+        point: Array,
+        euclidean_gradient: Array,
+        euclidean_hessian_v: Array,
+        tangent: Array,
+    ) -> Array:
+        return self._shaped(self._riemannian_hessian(
+            self._shaped(point),
+            self._shaped(euclidean_gradient),
+            self._shaped(euclidean_hessian_v),
+            self._shaped(tangent),
+        ))
+
     @abstractmethod
     def _tangent_dot(self, point: Array, v1: Array, v2: Array) -> float:
         pass
@@ -76,6 +95,20 @@ class Manifold(ABC):
 
     @abstractmethod
     def _tangent_project(self, point: Array, vector: Array) -> Array:
+        pass
+
+    @abstractmethod
+    def _riemannian_gradient(self, point: Array, euclidean_gradient: Array) -> Array:
+        pass
+
+    @abstractmethod
+    def _riemannian_hessian(
+        self,
+        point: Array,
+        euclidean_gradient: Array,
+        euclidean_hessian_v: Array,
+        tangent: Array,
+    ) -> Array:
         pass
 
     def _shaped(self, x: np.ndarray) -> Array:

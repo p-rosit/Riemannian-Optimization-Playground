@@ -33,3 +33,15 @@ class Sphere(Manifold):
 
     def _tangent_project(self, point: Array, vector: Array) -> Array:
         return vector - np.dot(point, vector) * point
+
+    def _riemannian_gradient(self, point: Array, euclidean_gradient: Array) -> Array:
+        return self._tangent_project(point, euclidean_gradient)
+
+    def _riemannian_hessian(
+        self,
+        point: Array,
+        euclidean_gradient: Array,
+        euclidean_hessian_v: Array,
+        tangent: Array,
+    ) -> Array:
+        return self._tangent_project(point, euclidean_hessian_v) - np.dot(point, euclidean_gradient) * tangent
