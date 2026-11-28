@@ -7,7 +7,6 @@ from riemopt.manifold.base import Manifold
 from riemopt.algorithm.line_search.base import LineSearch, NoLineSearch
 
 
-
 @dataclasses.dataclass
 class OptimizationStep:
     step: int
