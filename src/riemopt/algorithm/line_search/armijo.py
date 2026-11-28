@@ -1,7 +1,7 @@
-from typing import TYPE_CHECKING
 import dataclasses
-from riemopt.manifold.base import Manifold, Array
+from riemopt.typing import Array
 from riemopt.function import Function, Evals
+from riemopt.manifold.base import Manifold
 from riemopt.algorithm.line_search.base import LineSearch
 
 

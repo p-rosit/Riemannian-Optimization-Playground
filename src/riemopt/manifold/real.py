@@ -1,5 +1,6 @@
 import numpy as np
-from riemopt.manifold.base import Manifold, Array
+from riemopt.typing import Array
+from riemopt.manifold.base import Manifold
 
 
 class Real(Manifold):

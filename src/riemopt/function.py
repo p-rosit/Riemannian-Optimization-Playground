@@ -1,7 +1,7 @@
 from typing import Callable
 import dataclasses
-from riemopt.manifold.base import Manifold
 from riemopt.typing import Array
+from riemopt.manifold.base import Manifold
 
 
 @dataclasses.dataclass
@@ -19,15 +19,15 @@ class Function:
     function: Callable[[Array], float]
     gradient: Callable[[Array], Array] | None = None
 
-    def val(self, x: Array, evals: 'Evals | None' = None) -> float:
+    def val(self, x: Array, evals: Evals | None = None) -> float:
         if evals is not None:
             evals.function_evals += 1
         return self.function(x)
 
-    def grad(self, manifold: Manifold, x: Array, evals: 'Evals | None' = None) -> Array:
+    def grad(self, manifold: Manifold, x: Array, evals: Evals | None = None) -> Array:
         return manifold.tangent_project(x, self._grad(x, evals))
 
-    def _grad(self, x: Array, evals: 'Evals | None' = None) -> Array:
+    def _grad(self, x: Array, evals: Evals | None = None) -> Array:
         if self.gradient is not None:
             if evals is not None:
                 evals.gradient_evals += 1

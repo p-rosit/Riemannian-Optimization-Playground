@@ -4,9 +4,9 @@ import inspect
 import numpy as np
 from hypothesis import assume, strategies as st
 from hypothesis.extra.numpy import arrays
+from riemopt.typing import Array
 from riemopt.manifold import (
     NotProjectableError,
-    Array,
     Manifold,
     Real,
     Sphere,

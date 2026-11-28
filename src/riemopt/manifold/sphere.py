@@ -1,5 +1,6 @@
 import numpy as np
-from riemopt.manifold.base import Manifold, Array, NotProjectableError
+from riemopt.typing import Array
+from riemopt.manifold.base import Manifold, NotProjectableError
 
 
 class Sphere(Manifold):
