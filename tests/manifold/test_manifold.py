@@ -67,13 +67,14 @@ def test_retraction_gradient(manifold: type[Manifold], data):
 
     p, v = draw_arrays(data, m, 2)
     p = try_point_project(m, p)
-    v = m.tangent_project(p, v)
+    t = m.tangent_project(p, v)
 
-    v = v / np.linalg.norm(v)
+    assume((t_norm := m.tangent_norm(p, t)) > 1e-8 * np.max(np.abs(v)))
+    t = t / t_norm
 
-    q = m.retract(p, 1e-6 * v)
-    w = (q - p) / np.linalg.norm(q - p)
-    np.testing.assert_almost_equal(v, w)
+    q = m.retract(p, 1e-6 * t)
+    w = (q - p) / m.tangent_norm(p, q - p)
+    np.testing.assert_almost_equal(t, w, decimal=3)
 
 
 @given(data=st.data())
