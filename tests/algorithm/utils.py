@@ -19,4 +19,4 @@ def rayleigh_quotient(a: Array) -> rf.Function:
         g = np.reshape(2 * (a @ x - value(x) * x) / (x.T @ x), (n, ))
         return -g
 
-    return rf.Function(function=value, gradient=gradient)
+    return rf.FunctionNumerical(function=value, gradient=gradient)

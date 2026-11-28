@@ -1,6 +1,7 @@
-from riemopt.function.base import Function, Evals
+from riemopt.function.base import Evals, Function, FunctionNumerical
 
 __all__ = [
-    "Function",
     "Evals",
+    "Function",
+    "FunctionNumerical",
 ]
