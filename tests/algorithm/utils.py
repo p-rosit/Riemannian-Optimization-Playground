@@ -1,9 +1,9 @@
 import numpy as np
+from riemopt.function import Function
 import riemopt.manifold as rm
-import riemopt.algorithm as ra
 
 
-def rayleigh_quotient(a: rm.Array) -> ra.Function:
+def rayleigh_quotient(a: rm.Array) -> Function:
     m, n = a.shape
     assert m == n, f'expected square matrix, got {(m, n)}'
 
@@ -19,4 +19,4 @@ def rayleigh_quotient(a: rm.Array) -> ra.Function:
         g = np.reshape(2 * (a @ x - value(x) * x) / (x.T @ x), (n, ))
         return -g
 
-    return ra.Function(function=value, gradient=gradient)
+    return Function(function=value, gradient=gradient)

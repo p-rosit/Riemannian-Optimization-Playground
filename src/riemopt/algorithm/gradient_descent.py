@@ -1,7 +1,7 @@
 import dataclasses
 import numpy as np
 from riemopt.algorithm.base import OptimizationWithLineSearch, OptimizationResult, OptimizationEvals
-from riemopt.algorithm.function import Function
+from riemopt.function import Function
 from riemopt.manifold.base import Array
 
 

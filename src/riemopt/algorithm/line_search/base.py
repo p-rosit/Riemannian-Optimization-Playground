@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 from abc import ABC, abstractmethod
 from riemopt.manifold.base import Array, Manifold
-from riemopt.algorithm.function import Function
+from riemopt.function import Function
 
 if TYPE_CHECKING:
     from riemopt.algorithm.base import OptimizationEvals

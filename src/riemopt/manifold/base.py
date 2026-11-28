@@ -1,8 +1,7 @@
 from typing import final
 from abc import ABC, abstractmethod
 import numpy as np
-
-Array = np.typing.NDArray[np.float64]
+from riemopt.typing import Array
 
 
 class NotProjectableError(Exception):

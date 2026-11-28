@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 import dataclasses
 from riemopt.manifold.base import Manifold, Array
-from riemopt.algorithm.function import Function
+from riemopt.function import Function
 from riemopt.algorithm.line_search.base import LineSearch
 
 if TYPE_CHECKING:

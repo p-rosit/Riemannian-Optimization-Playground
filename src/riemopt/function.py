@@ -1,6 +1,7 @@
 from typing import Callable, TYPE_CHECKING
 import dataclasses
-from riemopt.manifold.base import Array, Manifold
+from riemopt.manifold.base import Manifold
+from riemopt.typing import Array
 
 if TYPE_CHECKING:
     from riemopt.algorithm.base import OptimizationEvals
@@ -25,4 +26,3 @@ class Function:
                 evals.gradient_evals += 1
             return self.gradient(x)
         raise NotImplementedError('Numerical approximation')
-
