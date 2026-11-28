@@ -8,6 +8,8 @@ class Stiefel(Manifold):
             raise ValueError(f"expected positive dimension, got {n}")
         if k <= 0:
             raise ValueError(f"expected positive amount of vectors, got {k}")
+        if k > n:
+            raise ValueError(f"expected less vectors than dimensions, got ({n}, {k})")
 
         self.dim = n * k - int(k * (k + 1) / 2)
         self.shape = (n, k)
