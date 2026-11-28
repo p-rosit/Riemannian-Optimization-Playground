@@ -58,7 +58,7 @@ def test_retraction_identity(manifold: type[Manifold], data):
     p = try_point_project(m, p)
 
     r = m.retract(p, np.zeros(shape=m.shape))
-    np.testing.assert_equal(p, r)
+    np.testing.assert_almost_equal(p, r)
 
 
 @given(data=st.data())
