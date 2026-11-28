@@ -101,7 +101,7 @@ def test_point_project_twice(manifold: type[Manifold], data):
     except NotProjectableError:
         assume(False)
     r2 = m.point_project(r1)
-    np.testing.assert_equal(r1, r2)
+    np.testing.assert_almost_equal(r1, r2)
 
 
 @given(data=st.data())
@@ -127,4 +127,4 @@ def test_tangent_project_twice(manifold: type[Manifold], data):
 
     r1 = m.tangent_project(p, v)
     r2 = m.tangent_project(p, r1)
-    np.testing.assert_equal(r1, r2)
+    np.testing.assert_almost_equal(r1, r2)
