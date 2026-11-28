@@ -66,10 +66,13 @@ def test_retraction_derivative(manifold: type[Manifold], data):
     m = draw_manifold(manifold, data)
 
     p, v = draw_arrays(data, m, 2)
+    assume((v_max := np.max(np.abs(v))) > 0)
+    v /= v_max  # we'll normalize later anyway
+
     p = try_point_project(m, p)
     t = m.tangent_project(p, v)
 
-    assume((t_norm := m.tangent_norm(p, t)) > 1e-8 * np.max(np.abs(v)))
+    assume((t_norm := m.tangent_norm(p, t)) > 1e-8)
     t = t / t_norm
 
     q = m.retract(p, 1e-6 * t)
