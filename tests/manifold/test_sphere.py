@@ -13,7 +13,7 @@ def test_negative_dimension_error():
 def test_project_origin_invalid():
     s = rm.Sphere(2)
 
-    with pytest.raises(ZeroDivisionError):
+    with pytest.raises(rm.NotProjectableError):
         _ = s.point_project(np.array([0.0, 0.0, 0.0]))
 
 
