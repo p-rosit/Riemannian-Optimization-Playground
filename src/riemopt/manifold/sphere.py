@@ -1,5 +1,5 @@
 import numpy as np
-from riemopt.manifold.base import Manifold, Array
+from riemopt.manifold.base import Manifold, Array, NotProjectableError
 
 
 class Sphere(Manifold):
@@ -26,7 +26,7 @@ class Sphere(Manifold):
 
     def _point_project(self, point: Array) -> Array:
         if (scale := np.max(np.abs(point))) == 0:
-            raise ZeroDivisionError
+            raise NotProjectableError
         point = point / scale
         return point / np.linalg.norm(point)
 

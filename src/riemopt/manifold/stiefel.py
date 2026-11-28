@@ -1,5 +1,5 @@
 import numpy as np
-from riemopt.manifold.base import Manifold, Array
+from riemopt.manifold.base import Manifold, Array, NotProjectableError
 
 
 class Stiefel(Manifold):
@@ -19,7 +19,10 @@ class Stiefel(Manifold):
         return np.trace(v1.T @ v2)
 
     def _point_project(self, point: Array) -> Array:
-        u, _, vt = np.linalg.svd(point, full_matrices=False)
+        u, s, vt = np.linalg.svd(point, full_matrices=False)
+        # s sorted descending
+        if s[-1] <= s[0] * max(self.shape) * np.finfo(s.dtype).eps:
+            raise NotProjectableError
         return u @ vt
 
     def _tangent_project(self, point: Array, vector: Array) -> Array:

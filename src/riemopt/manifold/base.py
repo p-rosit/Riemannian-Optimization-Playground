@@ -5,6 +5,10 @@ import numpy as np
 Array = np.typing.NDArray[np.float64]
 
 
+class NotProjectableError(Exception):
+    pass
+
+
 class Manifold(ABC):
     dim: int
     shape: tuple[int, ...]
@@ -50,7 +54,7 @@ class Manifold(ABC):
             point = 2 * rng.random(size=self.shape) - 1
             try:
                 return self.point_project(point)
-            except Exception:
+            except NotProjectableError:
                 continue
         raise TimeoutError(f'could not sample manifold within {N} tries')
 
@@ -60,7 +64,7 @@ class Manifold(ABC):
             vector = 2 * rng.random(size=self.shape) - 1
             try:
                 return self.tangent_project(point, vector)
-            except Exception:
+            except NotProjectableError:
                 continue
         raise TimeoutError(f'could not sample manifold within {N} tries')
 
