@@ -10,6 +10,11 @@ def test_negative_dimension_error():
         _ = rm.Sphere(-1)
 
 
+def test_zero_dimension_error():
+    with pytest.raises(ValueError):
+        _ = rm.Sphere(0)
+
+
 def test_project_origin_invalid():
     s = rm.Sphere(2)
 
